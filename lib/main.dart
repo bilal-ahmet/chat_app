@@ -1,4 +1,3 @@
-import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/shared/constans.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +10,14 @@ void main() async {
     await Firebase.initializeApp(
       options: FirebaseOptions(
           apiKey: Constants.apiKey,
-          appId: Constants.AppId,
+          appId: Constants.appId,
           messagingSenderId: Constants.messagingSenderId,
           projectId: Constants.projectId));
   }
   else{
     await Firebase.initializeApp();
   }
-  
+
   runApp(const MyApp());
 }
 
