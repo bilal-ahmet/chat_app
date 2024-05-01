@@ -1,6 +1,6 @@
-import 'dart:math';
-
+import 'package:chat_app/pages/auth/register_page.dart';
 import 'package:chat_app/widgets/widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -88,9 +88,29 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                 ),
-                ElevatedButton(onPressed: () {
-                  login();
-                }, child: Text("enter"))
+                const SizedBox(height: 20,),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ), onPressed: () {
+                    login();
+                  }, child: const Text("Sign In", style: TextStyle(color: Colors.white, fontSize: 16),)),
+                ),
+                const SizedBox(height: 10,),
+                Text.rich(TextSpan(
+                  text: "Don't have an account ?",
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                  children: [
+                    TextSpan(
+                      text: " Register here",
+                      style: const TextStyle(color: Colors.black, decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()..onTap =() {
+                        nextScreen(context, const RegisterPage());
+                      }
+                    )
+                  ]
+                ))
               ],
             )),
       ),
