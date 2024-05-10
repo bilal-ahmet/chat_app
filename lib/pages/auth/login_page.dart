@@ -1,4 +1,6 @@
 import 'package:chat_app/pages/auth/register_page.dart';
+import 'package:chat_app/pages/home_page.dart';
+import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formkey = GlobalKey<FormState>();
+  AuthService authService = AuthService();
   String email = "";
   String password = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
         /* appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
         ), */
-        body: SingleChildScrollView(
+        body: isLoading ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),) : SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
         child: Form(
@@ -118,7 +122,23 @@ class _LoginPageState extends State<LoginPage> {
     
   }
 
-  login(){
-    if(formkey.currentState!.validate()){}
+  login() async {
+    if (formkey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
+      await authService.loginUserWithEmailAndPassword(email, password).then((value) async{
+        if (value == true) {
+          nextScreen(context, const HomePage());
+        }
+        else{
+          showSnackBar(context, Colors.red, value);
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    }
   }
 }

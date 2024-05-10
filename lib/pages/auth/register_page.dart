@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   },
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 TextFormField(
                   decoration: textInputDecoration.copyWith(
                     labelText: "email",
@@ -155,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
           await HelperFunction.saveUserLoggedInStatus(true);
           await HelperFunction.saveEmailNameSF(email);
           await HelperFunction.saveUserNameSF(fullName);
-          nextScreen(context, HomePage());
+          nextScreen(context, const HomePage());
         }
         else{
           showSnackBar(context, Colors.red, value);

@@ -1,3 +1,4 @@
+import 'package:chat_app/service/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,10 +9,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthService authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text("Home Page"),),
+    return Scaffold(
+      body: Center(child: ElevatedButton(onPressed: () {
+        authService.signOut();
+      }, child: Text("Sign out"))),
     );
   }
 }
