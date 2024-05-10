@@ -1,7 +1,11 @@
+import 'package:chat_app/helper/helper_function.dart';
 import 'package:chat_app/pages/auth/register_page.dart';
 import 'package:chat_app/pages/home_page.dart';
 import 'package:chat_app/service/auth_service.dart';
+import 'package:chat_app/service/database_service.dart';
 import 'package:chat_app/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -130,7 +134,15 @@ class _LoginPageState extends State<LoginPage> {
 
       await authService.loginUserWithEmailAndPassword(email, password).then((value) async{
         if (value == true) {
-          nextScreen(context, const HomePage());
+          QuerySnapshot snapshot = await DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid).gettingUserData(email);
+          
+          // saving the values to our shared preferences
+          await HelperFunction.saveUserLoggedInStatus(true);
+          await HelperFunction.saveEmailNameSF(email);
+          await HelperFunction.saveUserNameSF(
+            snapshot.docs[0]["fullName"]
+          );
+          nextScreen(context, HomePage());
         }
         else{
           showSnackBar(context, Colors.red, value);
