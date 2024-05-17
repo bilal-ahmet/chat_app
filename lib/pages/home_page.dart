@@ -175,6 +175,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      
       body: groupList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -198,7 +199,7 @@ class _HomePageState extends State<HomePage> {
         // make some checks
         if (snapshot.hasData) {
           if (snapshot.data["group"] != null) {
-            if (snapshot.data["group"].lenght != 0) {
+            if ((snapshot.data["group"] as List).isNotEmpty) {
               return const Text("HELLOOO");
             } else {
               return noGroupWidget();
