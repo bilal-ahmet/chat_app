@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   String userName = "";
   String email = "";
 
+
   @override
   void initState() {
     super.initState();
@@ -37,6 +38,10 @@ class _HomePageState extends State<HomePage> {
       });
     });
   }
+
+  // getting the list of snapshots in our strem
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               onTap: () {
-                nextScreen(context, const ProfilePage());
+                nextScreen(context, ProfilePage(email: email, userName: userName,));
               },
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -157,6 +162,8 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    
+
     );
   }
 }
