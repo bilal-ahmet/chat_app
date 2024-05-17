@@ -8,7 +8,7 @@ class DataBaseService{
   // reference for our collection
 
   final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
-  final CollectionReference groupCollection = FirebaseFirestore.instance.collection("groups");
+  final CollectionReference groupCollection = FirebaseFirestore.instance.collection("group");
 
 
   // saving the user data
@@ -28,5 +28,10 @@ class DataBaseService{
   Future gettingUserData(String email) async{
     QuerySnapshot snapshot = await userCollection.where("email", isEqualTo: email).get();
     return snapshot;
+  }
+
+  // get user groups
+  getUserGroups() async{
+    return userCollection.doc(uid).snapshots();
   }
 }
