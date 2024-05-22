@@ -4,6 +4,7 @@ import 'package:chat_app/pages/profile_page.dart';
 import 'package:chat_app/pages/search_page.dart';
 import 'package:chat_app/service/auth_service.dart';
 import 'package:chat_app/service/database_service.dart';
+import 'package:chat_app/widgets/group_tile_widget.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,14 @@ class _HomePageState extends State<HomePage> {
         group = snapshot;
       });
     });
+  }
+
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
+  }
+
+  String getName(String res) {
+    return res.substring(res.indexOf("_") + 1);
   }
 
   @override
@@ -201,7 +210,16 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.hasData) {
           if (snapshot.data["group"] != null) {
             if ((snapshot.data["group"] as List).isNotEmpty) {
-              return const Text("HELLOOO");
+              return ListView.builder(
+                itemCount: snapshot.data["group"].length,
+                itemBuilder: (BuildContext context, int index) {
+                  int reverseIndex = snapshot.data["group"].length - index -1;
+                  return GroupTile(
+                      userName: snapshot.data["fullName"],
+                      groupId: getId(snapshot.data["group"][reverseIndex]),
+                      groupName: getName(snapshot.data["group"][reverseIndex]));
+                },
+              );
             } else {
               return noGroupWidget();
             }
@@ -271,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
                     child:
-                        Text("CANCEL", style: TextStyle(color: Colors.white))),
+                        const Text("CANCEL", style: TextStyle(color: Colors.white))),
                 ElevatedButton(
                     onPressed: () async {
                       if (groupName != "") {
@@ -288,7 +306,7 @@ class _HomePageState extends State<HomePage> {
                             .whenComplete(() {
                           isLoading = false;
                         });
-                        Navigator.pop(context);
+                        Navigator.of(context).pop();
                         showSnackBar(context, Colors.green,
                             "Group created successfully");
                       }
@@ -296,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor),
                     child:
-                        Text("CREATE", style: TextStyle(color: Colors.white)))
+                        const Text("CREATE", style: TextStyle(color: Colors.white)))
               ],
             );
           },

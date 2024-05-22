@@ -42,8 +42,9 @@ void showSnackBar(context, color, message) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(
       message,
-      style: TextStyle(backgroundColor: color),
+      style: TextStyle(backgroundColor: color,)
     ),
+    backgroundColor: color,
     duration: const Duration(seconds: 2),
     action: SnackBarAction(
       label: "OK",
