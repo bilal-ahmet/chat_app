@@ -224,55 +224,82 @@ class _HomePageState extends State<HomePage> {
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text(
-            "Create a group",
-            textAlign: TextAlign.left,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              isLoading == true
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    )
-                  : TextField(
-                      onChanged: (value) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                "Create a group",
+                textAlign: TextAlign.left,
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading == true
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        )
+                      : TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              groupName = value;
+                            });
+                          },
+                          style: const TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                  borderRadius: BorderRadius.circular(20)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: Colors.red),
+                                  borderRadius: BorderRadius.circular(20)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                  borderRadius: BorderRadius.circular(20))),
+                        )
+                ],
+              ),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
+                    child:
+                        Text("CANCEL", style: TextStyle(color: Colors.white))),
+                ElevatedButton(
+                    onPressed: () async {
+                      if (groupName != "") {
                         setState(() {
-                          groupName = value;
+                          isLoading = true;
                         });
-                      },
-                      style: const TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
-                              borderRadius: BorderRadius.circular(20)),
-                          errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.red),
-                              borderRadius: BorderRadius.circular(20)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
-                              borderRadius: BorderRadius.circular(20))),
-                    )
-            ],
-          ),
-          actions: [
-            ElevatedButton(onPressed: () {
-              Navigator.pop(context);
-            }, 
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-            child: Text("CANCEL")),
 
-            ElevatedButton(onPressed: () async{
-              
-            }, 
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-            child: Text("CREATE"))
-          ],
+                        DataBaseService(
+                                uid: FirebaseAuth.instance.currentUser!.uid)
+                            .createGroup(
+                                userName,
+                                FirebaseAuth.instance.currentUser!.uid,
+                                groupName)
+                            .whenComplete(() {
+                          isLoading = false;
+                        });
+                        Navigator.pop(context);
+                        showSnackBar(context, Colors.green,
+                            "Group created successfully");
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor),
+                    child:
+                        Text("CREATE", style: TextStyle(color: Colors.white)))
+              ],
+            );
+          },
         );
       },
     );
