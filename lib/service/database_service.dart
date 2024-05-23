@@ -58,4 +58,26 @@ class DataBaseService{
       "group" : FieldValue.arrayUnion(["${groupDocumentReference.id}_${groupName}"])
     });
   }
+
+
+  // getting the chats
+  getChats(String groupId) async{
+    return groupCollection.doc(groupId).collection("messages").orderBy("time").snapshots();
+  }
+
+  /*Future getGroupAdmin(String groupId) async{
+    DocumentReference d = groupCollection.doc(groupId);
+    DocumentSnapshot documentSnapshot = await d.get();
+    return documentSnapshot["admin"];
+  }*/
+
+  Future getGroupAdmin(String groupId) async {
+  if (groupId.isEmpty || groupId == null) {
+    return null; // Boş veya null groupId'yi yönet (isteğe bağlı)
+  }
+
+  DocumentReference d = groupCollection.doc(groupId);
+  DocumentSnapshot documentSnapshot = await d.get();
+  return documentSnapshot["admin"];
+}
 }
