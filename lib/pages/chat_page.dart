@@ -32,7 +32,7 @@ class _ChatPageState extends State<ChatPage> {
         chats = value;
       });
     });
-    DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid).getGroupAdmin(admin).then((value) {
+    DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid).getGroupAdmin(widget.groupId).then((value) {
       setState(() {
         admin = value;
       });

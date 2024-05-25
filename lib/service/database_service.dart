@@ -64,14 +64,16 @@ class DataBaseService{
   getChats(String groupId) async{
     return groupCollection.doc(groupId).collection("messages").orderBy("time").snapshots();
   }
-
-  Future getGroupAdmin(String groupId) async{
+  
+  getGroupAdmin(String groupId) async{
     DocumentReference d = groupCollection.doc(groupId);
     DocumentSnapshot documentSnapshot = await d.get();
     return documentSnapshot["admin"];
   }
+  
 
-  /*Future getGroupAdmin(String groupId) async {
+  /*
+  Future getGroupAdmin(String groupId) async {
   if (groupId.isEmpty || groupId == null) {
     return null; // Boş veya null groupId'yi yönet (isteğe bağlı)
   }
@@ -79,9 +81,11 @@ class DataBaseService{
   DocumentReference d = groupCollection.doc(groupId);
   DocumentSnapshot documentSnapshot = await d.get();
   return documentSnapshot["admin"];
-}*/
+}
+*/
 
-/*Future getGroupAdmin(String groupId) async {
+/*
+Future getGroupAdmin(String groupId) async {
   DocumentReference? d = groupId?.isNotEmpty == true ? groupCollection.doc(groupId) : null;
   if (d == null) {
     return null; // Boş veya null groupId'yi yönet (isteğe bağlı)
@@ -89,6 +93,7 @@ class DataBaseService{
 
   DocumentSnapshot documentSnapshot = await d.get();
   return documentSnapshot["admin"];
-}*/
+}
+*/
 
 }
