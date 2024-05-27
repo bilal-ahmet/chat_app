@@ -96,4 +96,9 @@ Future getGroupAdmin(String groupId) async {
 }
 */
 
+// get group member
+Future getGroupMembers(groupId) async{
+  return groupCollection.doc(groupId).snapshots();
+}
+
 }
