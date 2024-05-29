@@ -12,6 +12,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
 
   TextEditingController searchController = TextEditingController();
+  
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +58,23 @@ class _SearchPageState extends State<SearchPage> {
                 )
               ],
             ),
-          )
+          ),
+          isLoading ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),) : groupList()
         ],
       ),
     );
   }
 
   initiateSearchMethod(){
+    if(searchController.text.isNotEmpty){
+      setState(() {
+        isLoading = true;
+      });
+      
+    }
+  }
+
+  groupList(){
 
   }
 }
