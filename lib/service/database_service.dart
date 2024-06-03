@@ -101,4 +101,9 @@ Future getGroupMembers(groupId) async{
   return groupCollection.doc(groupId).snapshots();
 }
 
+// search
+Future searchByName(String groupName) async{
+  return groupCollection.where("groupName", isEqualTo: groupName).get();
+}
+
 }
