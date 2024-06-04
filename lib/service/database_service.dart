@@ -106,6 +106,7 @@ Future searchByName(String groupName) async{
   return groupCollection.where("groupName", isEqualTo: groupName).get();
 }
 
+// function => bool
 Future<bool> isUserJoined(String groupName, String groupId, String userName) async{
   DocumentReference userDocumentReference = userCollection.doc(uid);
   DocumentSnapshot documentSnapshot = await userDocumentReference.get();
@@ -116,6 +117,33 @@ Future<bool> isUserJoined(String groupName, String groupId, String userName) asy
   }
   else{
     return false;
+  }
+}
+
+// toggling the group join/exit
+Future toggleGroupJoin(String groupId, String groupName, String userName) async{
+  DocumentReference userDocumentReference = userCollection.doc(uid);
+  DocumentReference groupDocumentReference = groupCollection.doc(groupId);
+  DocumentSnapshot documentSnapshot = await userDocumentReference.get();
+
+  List<dynamic> group = await documentSnapshot["group"];
+  // if user has our groups => then remove then or also in other part re join
+
+  if(group.contains("${groupId}_$groupName")){
+    await userDocumentReference.update({
+      "group" : FieldValue.arrayRemove(["${groupId}_$groupName"])
+    });
+    await groupDocumentReference.update({
+      "group" : FieldValue.arrayRemove(["${uid}_$userName"])
+    });
+  }
+  else{
+    await userDocumentReference.update({
+      "group" : FieldValue.arrayUnion(["${groupId}_$groupName"])
+    });
+    await groupDocumentReference.update({
+      "group" : FieldValue.arrayUnion(["${uid}_$userName"])
+    });
   }
 }
 
