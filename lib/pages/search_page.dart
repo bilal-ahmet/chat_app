@@ -21,6 +21,7 @@ class _SearchPageState extends State<SearchPage> {
   bool hasUserSearched = false;
   String userName = "";
   User? user;
+  bool isJoined = false;
 
   @override
   void initState() {
@@ -37,6 +38,14 @@ class _SearchPageState extends State<SearchPage> {
     });
 
     user = FirebaseAuth.instance.currentUser;
+  }
+
+  String getName(String r) {
+    return r.substring(r.indexOf("_") + 1);
+  }
+
+  String getId(String res) {
+    return res.substring(0, res.indexOf("_"));
   }
 
   @override
@@ -133,8 +142,27 @@ class _SearchPageState extends State<SearchPage> {
         : Container();
   }
 
+  joinedOrNot(String userName, String groupId, String groupName, String admin) async{
+    await DataBaseService(uid: user!.uid).isUserJoined(groupName, groupId, userName).then((value) {
+      setState(() {
+        isJoined = value;
+      });
+    });
+  }
+
   Widget groupTile(
       String userName, String groupName, String groupId, String admin) {
-    return Text("Hello");
+        // function to check whether user already exists in group
+        joinedOrNot(userName, groupId, groupName, admin){}
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Text(groupName.substring(0, 1).toUpperCase(), style: const TextStyle(color: Colors.white),),
+      ),
+      title: Text(groupName, style: const TextStyle(fontWeight: FontWeight.w600),),
+      subtitle: Text("admin: ${getName(admin)}"),
+    );
   }
 }
