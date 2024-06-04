@@ -134,7 +134,7 @@ Future toggleGroupJoin(String groupId, String groupName, String userName) async{
       "group" : FieldValue.arrayRemove(["${groupId}_$groupName"])
     });
     await groupDocumentReference.update({
-      "group" : FieldValue.arrayRemove(["${uid}_$userName"])
+      "members" : FieldValue.arrayRemove(["${uid}_$userName"])
     });
   }
   else{
@@ -142,7 +142,7 @@ Future toggleGroupJoin(String groupId, String groupName, String userName) async{
       "group" : FieldValue.arrayUnion(["${groupId}_$groupName"])
     });
     await groupDocumentReference.update({
-      "group" : FieldValue.arrayUnion(["${uid}_$userName"])
+      "members" : FieldValue.arrayUnion(["${uid}_$userName"])
     });
   }
 }

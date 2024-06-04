@@ -155,7 +155,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget groupTile(
       String userName, String groupName, String groupId, String admin) {
         // function to check whether user already exists in group
-        joinedOrNot(userName, groupId, groupName, admin){}
+        joinedOrNot(userName, groupId, groupName, admin);
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       leading: CircleAvatar(
