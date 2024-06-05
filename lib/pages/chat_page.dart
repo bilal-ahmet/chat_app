@@ -1,5 +1,6 @@
 import 'package:chat_app/pages/auth/group_info.dart';
 import 'package:chat_app/service/database_service.dart';
+import 'package:chat_app/widgets/message_tile.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,30 +85,37 @@ class _ChatPageState extends State<ChatPage> {
               width: MediaQuery.of(context).size.width,
               color: Colors.grey[700],
               child: Row(
-                children: [Expanded(child: TextFormField(
-                  controller: messageController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: "Send a message",
-                    hintStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    border: InputBorder.none
+                children: [
+                  Expanded(
+                      child: TextFormField(
+                    controller: messageController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                        hintText: "Send a message",
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 16),
+                        border: InputBorder.none),
+                  )),
+                  const SizedBox(
+                    width: 12,
                   ),
-                )),
-                const SizedBox(width: 12,),
-                GestureDetector(
-                  onTap: () {
-                    sendMessage();
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(30)
+                  GestureDetector(
+                    onTap: () {
+                      sendMessage();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: const Center(
+                        child: Icon(
+                          Icons.send,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    child: const Center(child: Icon(Icons.send, color: Colors.white,),),
-                  ),
-                )
+                  )
                 ],
               ),
             ),
@@ -121,14 +129,33 @@ class _ChatPageState extends State<ChatPage> {
     return StreamBuilder(
       stream: chats,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return snapshot.hasData ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
-          itemBuilder: (context, index) {
-          
-        },) : Container();
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index) {
+                  return MessageTile(
+                      message: snapshot.data.docs[index]["message"],
+                      sender: snapshot.data.docs[index]["sender"],
+                      sentByMe: widget.userName ==
+                          snapshot.data.docs[index]["sender"]);
+                },
+              )
+            : Container();
       },
     );
   }
 
-  sendMessage(){}
+  sendMessage() {
+    if(messageController.text.isNotEmpty){
+      Map<String, dynamic> chatMessageMap = {
+        "message" : messageController.text,
+        "sender" : widget.userName,
+        "time" : DateTime.now().millisecondsSinceEpoch
+      };
+      DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid).sendMessage(widget.groupId, chatMessageMap);
+      setState(() {
+        messageController.clear();
+      });
+    }
+  }
 }
