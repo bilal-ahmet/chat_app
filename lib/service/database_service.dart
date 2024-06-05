@@ -154,7 +154,7 @@ Future getGroupAdmin(String groupId) async {
 
   // send message
 
-  sendMessage(String groupId, Map<String, dynamic> chatMessageData) async{
+  Future sendMessage(String groupId, Map<String, dynamic> chatMessageData) async{
     groupCollection.doc(groupId).collection("message").add(chatMessageData);
     groupCollection.doc(groupId).update({
       "recentMessage" : chatMessageData["message"],
