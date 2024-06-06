@@ -30,6 +30,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     // TODO: implement initState
     getChatAndAdmin();
+    super.initState();
   }
 
   void getChatAndAdmin() {
@@ -75,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
       body: Stack(
-        children: <Widget>[
+        children: [
           chatMessages(),
           Container(
             alignment: Alignment.bottomCenter,
@@ -131,7 +132,7 @@ class _ChatPageState extends State<ChatPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return snapshot.hasData
             ? ListView.builder(
-                itemCount: snapshot.data.docs.length,
+                itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   return MessageTile(
                       message: snapshot.data.docs[index]["message"],
@@ -146,13 +147,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   sendMessage() {
-    if(messageController.text.isNotEmpty){
+    if (messageController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
-        "message" : messageController.text,
-        "sender" : widget.userName,
-        "time" : DateTime.now().millisecondsSinceEpoch
+        "message": messageController.text,
+        "sender": widget.userName,
+        "time": DateTime.now().millisecondsSinceEpoch
       };
-      DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid).sendMessage(widget.groupId, chatMessageMap);
+      DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+          .sendMessage(widget.groupId, chatMessageMap);
       setState(() {
         messageController.clear();
       });
