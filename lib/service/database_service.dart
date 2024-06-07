@@ -66,7 +66,7 @@ class DataBaseService {
   Future getChats(String groupId) async {
     return groupCollection
         .doc(groupId)
-        .collection("messages")
+        .collection("message")
         .orderBy("time")
         .snapshots();
   }

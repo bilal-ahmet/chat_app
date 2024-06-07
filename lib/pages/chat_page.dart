@@ -31,14 +31,14 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
-  void getChatAndAdmin() {
+  getChatAndAdmin() {
     DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid)
         .getChats(widget.groupId)
         .then((value) {
-      setState(() {
-        value = chats;
-      });
-    });
+          setState(() {
+            chats = value;
+          });
+        });
     DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid)
         .getGroupAdmin(widget.groupId)
         .then((value) {
