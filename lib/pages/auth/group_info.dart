@@ -8,7 +8,7 @@ class GroupInfo extends StatefulWidget {
   final String groupId;
   final String groupName;
   final String adminName;
-  GroupInfo(
+  const GroupInfo(
       {super.key,
       required this.groupId,
       required this.groupName,
@@ -156,7 +156,7 @@ class _GroupInfoState extends State<GroupInfo> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data["members"] != null) {
-            if ((snapshot.data["members"] as List).length != 0) {
+            if ((snapshot.data["members"] as List).isNotEmpty) {
               return ListView.builder(
                 shrinkWrap: true,
                 itemCount: (snapshot.data["members"] as List).length,

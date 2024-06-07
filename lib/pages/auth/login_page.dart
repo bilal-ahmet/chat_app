@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           await HelperFunction.saveUserNameSF(
             snapshot.docs[0]["fullName"]
           );
-          nextScreen(context, HomePage());
+          nextScreen(context, const HomePage());
         }
         else{
           showSnackBar(context, Colors.red, value);

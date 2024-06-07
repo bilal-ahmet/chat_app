@@ -5,7 +5,6 @@ import 'package:chat_app/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ChatPage extends StatefulWidget {
   final String groupId;
@@ -28,7 +27,6 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getChatAndAdmin();
     super.initState();
   }
@@ -38,7 +36,7 @@ class _ChatPageState extends State<ChatPage> {
         .getChats(widget.groupId)
         .then((value) {
       setState(() {
-        chats = value;
+        value = chats;
       });
     });
     DataBaseService(uid: FirebaseAuth.instance.currentUser!.uid)
@@ -129,16 +127,16 @@ class _ChatPageState extends State<ChatPage> {
   chatMessages() {
     return StreamBuilder(
       stream: chats,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         return snapshot.hasData
             ? ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   return MessageTile(
-                      message: snapshot.data.docs[index]["message"],
-                      sender: snapshot.data.docs[index]["sender"],
+                      message: snapshot.data!.docs[index]['message'],
+                      sender: snapshot.data!.docs[index]['sender'],
                       sentByMe: widget.userName ==
-                          snapshot.data!.docs[index]["sender"]);
+                          snapshot.data!.docs[index]['sender']);
                 },
               )
             : Container();

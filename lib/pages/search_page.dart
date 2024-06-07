@@ -4,9 +4,7 @@ import 'package:chat_app/service/database_service.dart';
 import 'package:chat_app/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -27,7 +25,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserIdAndName();
   }
