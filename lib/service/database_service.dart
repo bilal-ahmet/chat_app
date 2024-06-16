@@ -33,7 +33,7 @@ class DataBaseService {
   }
 
   // get user groups
-  getUserGroups() async {
+  Future getUserGroups() async {
     return userCollection.doc(uid).snapshots();
   }
 
